@@ -9,11 +9,13 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import br.edu.ifpb.pweb.backend.dtos.CaronaDTO;
 import br.edu.ifpb.pweb.backend.modelos.Carona;
 import br.edu.ifpb.pweb.backend.servicos.CaronaServico;
 
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -21,13 +23,17 @@ import org.springframework.web.bind.annotation.PathVariable;
 
 @RestController
 @RequestMapping("/caronas")
+@CrossOrigin
 public class CaronaControlador {
     @Autowired
     private CaronaServico caronaServico;
 
     @GetMapping
-    public ResponseEntity<List<Carona>> listarCaronas() {
-        return ResponseEntity.ok(caronaServico.listarTodas());
+    public ResponseEntity<List<Carona>> listarCaronas(
+        @RequestParam(required = true) String motoristaEmail,
+        @RequestParam(defaultValue = "false") boolean finalizada
+    ) {
+        return ResponseEntity.ok(caronaServico.listarTodas(motoristaEmail, finalizada));
     }
 
     @GetMapping("/{id}")

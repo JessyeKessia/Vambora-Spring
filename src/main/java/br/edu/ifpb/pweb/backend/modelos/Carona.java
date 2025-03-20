@@ -19,7 +19,10 @@ public class Carona {
     private Long id;
 
     @Column(nullable = false)
-    private String motoristaId;
+    private String motoristaNome;
+
+    @Column(nullable = false)
+    private String motoristaEmail;
 
     @Column(nullable = false)
     private LocalDate dataDeSaida;
@@ -38,4 +41,7 @@ public class Carona {
 
     @Column(nullable = true)
     private String observacoes;
+
+    @Column(nullable = true)
+    private Boolean finalizada;
 }

@@ -20,20 +20,22 @@ public class CaronaServico {
         validarDados(carona);
 
         Carona novaCarona = Carona.builder()
-            .motoristaId(carona.motoristaId())
+            .motoristaNome(carona.motoristaNome())
+            .motoristaEmail(carona.motoristaEmail())
             .dataDeSaida(carona.dataDeSaida())
             .enderecoDePartida(carona.enderecoDePartida())
             .enderecoDeChegada(carona.enderecoDeChegada())
             .valor(carona.valor())
             .vagas(carona.vagas())
             .observacoes(carona.observacoes())
+            .finalizada(carona.finalizada())
             .build();
         
         return caronaRepositorio.save(novaCarona); 
     }
 
-    public List<Carona> listarTodas() {
-        return caronaRepositorio.findAll();
+    public List<Carona> listarTodas(String motoristaEmail, Boolean finalizada) {
+        return caronaRepositorio.findByFinalizadaAndMotoristaEmail(finalizada, motoristaEmail);
     }
 
     public Optional<Carona> pegarCaronaPorId(Long id) {
@@ -56,20 +58,26 @@ public class CaronaServico {
             throw new Exception("Carona não existe");
         
         Carona caronaAtualizada = carona.get();
-        caronaAtualizada.setMotoristaId(caronaDTO.motoristaId());
+        caronaAtualizada.setMotoristaNome(caronaDTO.motoristaNome());
+        caronaAtualizada.setMotoristaEmail(caronaDTO.motoristaEmail());
         caronaAtualizada.setDataDeSaida(caronaDTO.dataDeSaida());
         caronaAtualizada.setEnderecoDePartida(caronaDTO.enderecoDePartida());
         caronaAtualizada.setEnderecoDeChegada(caronaDTO.enderecoDeChegada());
         caronaAtualizada.setValor(caronaDTO.valor());
         caronaAtualizada.setVagas(caronaDTO.vagas());
         caronaAtualizada.setObservacoes(caronaDTO.observacoes());
+        caronaAtualizada.setFinalizada(caronaDTO.finalizada());
 
         return caronaRepositorio.save(caronaAtualizada);
     }
 
     private void validarDados(CaronaDTO carona) throws Exception {
-        if (carona.motoristaId().trim().isEmpty()) {
-            throw new Exception("motoristaId não foi informado");
+        if (carona.motoristaNome().trim().isEmpty()) {
+            throw new Exception("motoristaNome não foi informado");
+        }
+
+        if (carona.motoristaEmail().trim().isEmpty()) {
+            throw new Exception("motoristaEmail não foi informado");
         }
 
         if (carona.dataDeSaida().isBefore(LocalDate.now())) {
